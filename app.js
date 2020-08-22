@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const router = require('./router');
 
 app.use(express.static('public'));
 
@@ -8,8 +9,6 @@ app.set('views', 'views');
 //using ejs viewing engine for using render etc
 app.set('view engine', 'ejs')
 
-app.get('/', function(req, res){
-    res.render('homepage');
-})
+app.use('/', router);
 
 app.listen(3000);
