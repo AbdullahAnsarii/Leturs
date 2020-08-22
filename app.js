@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const router = require('./router');
-
+//boilerplate code so that we can use request.body
+app.use(express.urlencoded({extended: false}))
+app.use(express.json());
 app.use(express.static('public'));
 //look for views(htmls) in views folder
 app.set('views', 'views');
