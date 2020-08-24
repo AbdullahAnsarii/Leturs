@@ -17,5 +17,11 @@ exports.dashboard = (req, res) => {
 exports.register = (req, res) => {
     //creating blueprint of new user
     let user = new User(req.body);
-    console.log(req.body)
+    user.register();
+    if (user.errors.length){
+        res.send(user.errors);
+    }
+    else{
+        res.send('Congratulations!!! no errors');
+    }
 }
