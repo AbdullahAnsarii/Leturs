@@ -1,6 +1,7 @@
 //here in model part we will actually model data we recieve controller requires it from here.
 //this points to whoever is calling here user is calling the register() function
 //You can't use arrow functions for defining a constructor function.
+const usersCollection = require('../db').collection('users');
 const validator = require('validator');
 let User = function(data) {
     this.data = data;
@@ -36,5 +37,8 @@ User.prototype.register = function() {
 
     //If there are no validation error than
     //than save data in database
+    if(!this.errors.length){
+        usersCollection.insertOne(this.data);
+    }
 }
 module.exports = User;
