@@ -1,6 +1,7 @@
 //here in model part we will actually model data we recieve controller requires it from here.
 //this points to whoever is calling here user is calling the register() function
 //You can't use arrow functions for defining a constructor function.
+//mongodb functions are by default Promises.
 const usersCollection = require('../db').collection('users');
 const validator = require('validator');
 let User = function(data) {
@@ -8,7 +9,7 @@ let User = function(data) {
     this.errors = [];
 }
 User.prototype.cleanUp = function() {
-    //here ifuser input bogus data we deal with it
+    //here if user input bogus data we deal with it
     //just extra not necessarily needed
     if(typeof(this.data.username) != 'string'){this.data.username = ''};
     if(typeof(this.data.email) != 'string'){this.data.email = ''};
@@ -29,6 +30,25 @@ User.prototype.validate = function() {
     if (this.data.username.length > 0 && this.data.username.length < 3){this.errors.push('username must be atleast 3 characters long')};
     if (this.data.password.length > 0 && this.data.password.length < 12){this.errors.push('password must be atleast 12 characters long')};
 }
+//attemptedUuser is the one who logs in and sends in credentials i.e this.data.username
+User.prototype.login = function(){
+    return new Promise((resolve, reject) => {
+        this.cleanUp();
+        usersCollection.findOne({username: this.data.username}).then((attemptedUser) => {
+                if(attemptedUser && attemptedUser.password == this.data.password){
+                    resolve('Congrats');
+                }
+                else{
+                    reject('invalid username/password');
+                }
+        }).catch( () => {
+            reject('Unknown error occured!!')
+        })
+
+        }) 
+    }
+
+
 User.prototype.register = function() {
     //Validate user data
     this.cleanUp();
