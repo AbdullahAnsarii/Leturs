@@ -2,6 +2,7 @@
 //this points to whoever is calling here user is calling the register() function
 //You can't use arrow functions for defining a constructor function.
 //mongodb functions are by default Promises.
+//hash passwords at the end remember
 const usersCollection = require('../db').collection('users');
 const validator = require('validator');
 let User = function(data) {

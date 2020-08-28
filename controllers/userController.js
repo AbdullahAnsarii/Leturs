@@ -5,6 +5,8 @@ const User = require('../models/User');
 exports.login = (req, res) => {
     let user = new User(req.body);
     user.login().then(result => {
+        //creating session
+        req.session.user = {favColor: "blue", username: user.data.username}
         res.send(result);
     }).catch(err => {
         res.send(err);
@@ -16,7 +18,14 @@ exports.logout = () => {
 }
 
 exports.dashboard = (req, res) => {
-    res.render("homepage");
+    //login krega tab hi session create hoga
+    if(req.session.user){
+        res.send('Welcome to the app');
+    }
+    //vrna homepage
+    else{
+        res.render('homepage');
+    }
 }
 
 exports.register = (req, res) => {
