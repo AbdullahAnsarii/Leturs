@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const router = require('./router');
 const session = require('express-session');
+const Mongostore = require('connect-mongo')(session)
 //boilerplate code to create sessions and store cookie
 let sessionOptions = session({
     //secret s someone couldn't guess
     secret: "I love javascript",
+    store: new Mongostore({client: require('./db')}),
     resave: false,
     saveUninitialized: false,
     //setting up cookie expiration time to be one day

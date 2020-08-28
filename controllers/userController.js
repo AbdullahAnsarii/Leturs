@@ -20,7 +20,7 @@ exports.logout = () => {
 exports.dashboard = (req, res) => {
     //login krega tab hi session create hoga
     if(req.session.user){
-        res.send('Welcome to the app');
+        res.render('homeDashboard', {username: req.session.user.username});
     }
     //vrna homepage
     else{
