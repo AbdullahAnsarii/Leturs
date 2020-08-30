@@ -36,18 +36,26 @@ exports.dashboard = (req, res) => {
     //vrna homepage
     //flash package will delete the data as soon as you have accessed vrna normally bhi krskte thy
     else{
-        res.render('homepage', {errors: req.flash('errors')});
+        res.render('homepage', {errors: req.flash('errors'), regErrors: req.flash('regErrors')});
     }
 }
 
-exports.register = (req, res) => {
+exports.register = function(req, res){
     //creating blueprint of new user
     let user = new User(req.body);
-    user.register();
-    if (user.errors.length){
-        res.send(user.errors);
-    }
-    else{
-        res.send('Congratulations!!! no errors');
-    }
+    user.register().then(() => {
+        req.session.user = {username: user.data.username}
+        req.session.save(function(){
+            res.redirect('/');
+        })
+    }).catch(regErrors => {
+        regErrors.forEach( (error) => {
+            //push error to regErrors
+            req.flash('regErrors', error);
+        })
+        req.session.save(function(){
+            res.redirect('/');
+        })
+    });
+
 }
