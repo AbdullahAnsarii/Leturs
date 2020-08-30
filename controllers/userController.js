@@ -11,7 +11,12 @@ exports.login = (req, res) => {
             res.redirect('/');
         })
     }).catch(err => {
-        res.send(err);
+        //eq to req.sessions.flash.errors =[]
+        //jo bhi error hoga list me ajayega
+        req.flash('errors', err);
+        req.session.save(() => {
+            res.redirect('/');
+        })
     });
 }
 
@@ -29,8 +34,9 @@ exports.dashboard = (req, res) => {
         res.render('homeDashboard', {username: req.session.user.username});
     }
     //vrna homepage
+    //flash package will delete the data as soon as you have accessed vrna normally bhi krskte thy
     else{
-        res.render('homepage');
+        res.render('homepage', {errors: req.flash('errors')});
     }
 }
 

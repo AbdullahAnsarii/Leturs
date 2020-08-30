@@ -3,6 +3,7 @@ const app = express();
 const router = require('./router');
 const session = require('express-session');
 const Mongostore = require('connect-mongo')(session)
+const flash = require('connect-flash')
 //boilerplate code to create sessions and store cookie
 let sessionOptions = session({
     //secret s someone couldn't guess
@@ -15,6 +16,7 @@ let sessionOptions = session({
         httpOnly: true}
 })
 app.use(sessionOptions);
+app.use(flash());
 //boilerplate code so that we can use request.body
 app.use(express.urlencoded({extended: false}))
 app.use(express.json());
