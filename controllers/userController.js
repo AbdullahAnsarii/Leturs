@@ -7,13 +7,19 @@ exports.login = (req, res) => {
     user.login().then(result => {
         //creating session
         req.session.user = {favColor: "blue", username: user.data.username}
-        res.send(result);
+        req.session.save(() => {
+            res.redirect('/');
+        })
     }).catch(err => {
         res.send(err);
     });
 }
 
-exports.logout = () => {
+exports.logout = (req, res) => {
+    //destroy is async but we didn't use promise we use callback because it isn't supportive yet 
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
 
 }
 
